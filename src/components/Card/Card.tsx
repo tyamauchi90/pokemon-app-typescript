@@ -2,7 +2,7 @@ import { Pokemon } from "../../types/PokemonData";
 import "./Card.css";
 
 type CardProps = {
-  pokemon: Pokemon;
+  pokemon: Pokemon; //props の型情報を指定するため
 };
 
 const Card: React.FC<CardProps> = ({ pokemon }) => {

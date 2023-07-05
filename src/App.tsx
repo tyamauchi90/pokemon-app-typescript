@@ -45,7 +45,7 @@ function App(): JSX.Element {
 
   const handleNextPage = async () => {
     setLoading(true);
-    let data: LoadPokemon = await getAllPokemon(nextUrl || "");
+    let data: LoadPokemon = await getAllPokemon(nextUrl ?? "");
     // console.log(data);
     await loadPokemon(data.results);
     setNextUrl(data.next); //nextUrlが更新される
@@ -56,14 +56,13 @@ function App(): JSX.Element {
   const handlePrevPage = async () => {
     if (!prevUrl) return;
     setLoading(true);
-    let data: LoadPokemon = await getAllPokemon(prevUrl || "");
+    let data: LoadPokemon = await getAllPokemon(prevUrl ?? "");
     // console.log(data);
     await loadPokemon(data.results);
     setNextUrl(data.next); //nextUrlが更新される
     setPrevUrl(data.previous); //prevUrlが更新される
     setLoading(false);
   };
-
   return (
     <>
       <Navbar></Navbar>
