@@ -1,23 +1,5 @@
+import { Pokemon } from "../../types/PokemonData";
 import "./Card.css";
-
-export type Pokemon = {
-  sprites: {
-    front_default: string;
-  };
-  name: string;
-  types: {
-    type: {
-      name: string;
-    };
-  }[];
-  weight: number;
-  height: number;
-  abilities: {
-    ability: {
-      name: string;
-    };
-  }[];
-};
 
 type CardProps = {
   pokemon: Pokemon;

@@ -1,25 +1,26 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { getAllPokemon, getPokemon } from "./utils/pokemon";
-import Card, { Pokemon } from "./components/Card/Card";
+import Card from "./components/Card/Card";
 import Navbar from "./components/Navbar/Navbar";
+import { LoadPokemon, Pokemon } from "./types/PokemonData";
 
 function App(): JSX.Element {
   const initialURL = "https://pokeapi.co/api/v2/pokemon/";
 
   const [loading, setLoading] = useState<boolean>(true);
   const [pokemonData, setPokemonData] = useState<Array<Pokemon>>([]);
-  const [nextUrl, setNextUrl] = useState<string>("");
-  const [prevUrl, setPrevUrl] = useState<string>("");
+  const [nextUrl, setNextUrl] = useState<string | null>("");
+  const [prevUrl, setPrevUrl] = useState<string | null>("");
 
   useEffect(() => {
     const fetchPokemonData = async () => {
       //全てのポケモンデータを取得
-      let res: Array<LoadPokemon> = await getAllPokemon(initialURL);
+      let res: LoadPokemon = await getAllPokemon(initialURL);
       //各ポケモンの詳細なデータを取得
       loadPokemon(res.results);
       // console.log(res.results);
-      console.log(res);
+      // console.log(res);
       setNextUrl(res.next);
       setPrevUrl(res.previous);
       setLoading(false);
@@ -27,9 +28,9 @@ function App(): JSX.Element {
     fetchPokemonData();
   }, []);
 
-  const loadPokemon = async (data: Array<{ name: string; url: string }>) => {
+  const loadPokemon = async (data: { name: string; url: string }[]) => {
     //res.results === data
-    let _pokemonData = await Promise.all(
+    let _pokemonData = await Promise.all<Pokemon>(
       //Promise.allの中には配列を入れる
       data.map((pokemon) => {
         // console.log(pokemon);
@@ -44,7 +45,7 @@ function App(): JSX.Element {
 
   const handleNextPage = async () => {
     setLoading(true);
-    let data = await getAllPokemon(nextUrl);
+    let data: LoadPokemon = await getAllPokemon(nextUrl || "");
     // console.log(data);
     await loadPokemon(data.results);
     setNextUrl(data.next); //nextUrlが更新される
@@ -55,7 +56,7 @@ function App(): JSX.Element {
   const handlePrevPage = async () => {
     if (!prevUrl) return;
     setLoading(true);
-    let data = await getAllPokemon(prevUrl);
+    let data: LoadPokemon = await getAllPokemon(prevUrl || "");
     // console.log(data);
     await loadPokemon(data.results);
     setNextUrl(data.next); //nextUrlが更新される
